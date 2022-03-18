@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-openapi_filename="openapi/smart-events.yaml"
-output_path="openapi/generated"
-package_name="smart-events"
+openapi_filename=$(dirname $0)/../openapi/smart-events.yaml
+output_path=$(dirname $0)/../openapi/generated
+package_name=$(dirname $0)/../smart-events
 additional_properties="ngVersion=6.1.7,npmName=${package_name},supportsES6=true,withInterfaces=true,withSeparateModelsAndApi=true,modelPackage=model,apiPackage=api"
 
 npx @openapitools/openapi-generator-cli version-manager set 5.4.0
