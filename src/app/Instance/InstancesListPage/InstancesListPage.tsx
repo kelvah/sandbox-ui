@@ -63,7 +63,7 @@ const InstancesListPage = (): JSX.Element => {
       description: "Description for the instance one",
       id: "87508471-ee0f-4f53-b574-da8a61285986",
       name: "Instance one",
-      status: "ready",
+      status: "accepted",
       submitted_at: "2022-02-24T13:34:00Z",
       published_at: "2022-02-24T13:35:00Z",
       endpoint:
@@ -83,7 +83,7 @@ const InstancesListPage = (): JSX.Element => {
       description: "Description for the instance three",
       id: "ee22ce62-1f23-4dd7-b106-e4158baf8228",
       name: "Instance three",
-      status: "ready",
+      status: "failed",
       submitted_at: "2022-02-15T12:03:00Z",
       published_at: "2022-02-15T12:04:00Z",
       endpoint:
