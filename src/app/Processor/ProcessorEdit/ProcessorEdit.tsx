@@ -370,6 +370,25 @@ const ProcessorEdit = (props: ProcessorEditProps): JSX.Element => {
                           </FormSection>
                         )}
 
+                        {processorType === "sink" && (
+                          <FormSection title={t("processor.action")}>
+                            <TextContent>
+                              <Text component="p" ouiaId="action-description">
+                                {t("processor.selectActionDescription")}
+                              </Text>
+                            </TextContent>
+                            <ConfigurationEdit
+                              configType={ProcessorSchemaType.ACTION}
+                              action={action}
+                              registerValidation={registerValidateConfig}
+                              onChange={setAction}
+                              readOnly={isExistingProcessor}
+                              schemaCatalog={schemaCatalog}
+                              getSchema={getSchema}
+                            />
+                          </FormSection>
+                        )}
+
                         <FormSection
                           title={t("processor.filters")}
                           titleElement="h2"
@@ -399,24 +418,6 @@ const ProcessorEdit = (props: ProcessorEditProps): JSX.Element => {
                             }}
                           />
                         </FormSection>
-                        {processorType === "sink" && (
-                          <FormSection title={t("processor.action")}>
-                            <TextContent>
-                              <Text component="p" ouiaId="action-description">
-                                {t("processor.selectActionDescription")}
-                              </Text>
-                            </TextContent>
-                            <ConfigurationEdit
-                              configType={ProcessorSchemaType.ACTION}
-                              action={action}
-                              registerValidation={registerValidateConfig}
-                              onChange={setAction}
-                              readOnly={isExistingProcessor}
-                              schemaCatalog={schemaCatalog}
-                              getSchema={getSchema}
-                            />
-                          </FormSection>
-                        )}
                         {processorType !== "" && (
                           <AlertGroup
                             className={"processor-edit__form__notice"}
