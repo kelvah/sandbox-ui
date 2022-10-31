@@ -39,6 +39,8 @@ export function useCreateBridgeApi(): {
               // This will of course change when we'll expand the cloud provider support.
               onError("region-unavailable");
               break;
+            default:
+              onError("generic-error");
           }
         } else {
           onError("generic-error");
