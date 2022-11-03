@@ -96,6 +96,7 @@ describe("the 'Create a SE instance' Modal", () => {
       });
   });
 
+  // instance with name "error-test" already exists
   it("Submit and expect error", () => {
     const errorInstanceName: string = "error-test";
     cy.ouiaId("create-smart-event-instance", "PF4/Button").click();
@@ -108,6 +109,24 @@ describe("the 'Create a SE instance' Modal", () => {
           cy.ouiaId("error-instance-create-fail", "PF4/Alert").should(
             "have.text",
             "Danger alert:Address form errors to proceed."
+          );
+        });
+    });
+  });
+
+  // instance with name containing "error-test" causes 4xx response code
+  it("Submit and expect error while creating", () => {
+    const errorInstanceName: string = "error-test-2";
+    cy.ouiaId("create-smart-event-instance", "PF4/Button").click();
+    cy.ouiaId("create-instance", "PF4/ModalContent").then(($modal) => {
+      cy.wrap($modal)
+        .should("be.visible")
+        .within(() => {
+          cy.ouiaId("new-name", "PF4/TextInput").type(errorInstanceName);
+          cy.ouiaId("submit", "PF4/Button").click();
+          cy.ouiaId("error-instance-create-fail", "PF4/Alert").should(
+            "have.text",
+            "Danger alert:Error while creating a Smart Event instance. Please, try again later."
           );
         });
     });
