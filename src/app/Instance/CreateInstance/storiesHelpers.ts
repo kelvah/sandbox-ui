@@ -2,10 +2,10 @@
 
 import { CloudProviderWithRegions } from "@app/Instance/CreateInstance/types";
 import { PlayFunction } from "@storybook/csf";
-import { ReactFramework } from "@storybook/react";
-import { expect } from "@storybook/jest";
+import { ReactRenderer } from "@storybook/react";
 import { CreateInstanceProps } from "@app/Instance/CreateInstance/CreateInstance";
 import { userEvent, waitFor, within } from "@storybook/testing-library";
+import { expect } from "@storybook/jest";
 
 export const cloudRegion = {
   kind: "CloudRegion",
@@ -30,14 +30,13 @@ export const cloudProviderUnavailable: CloudProviderWithRegions = {
 };
 
 export const sampleSubmit: PlayFunction<
-  ReactFramework,
+  ReactRenderer,
   CreateInstanceProps
 > = async ({ canvasElement }) => {
   const canvas = within(canvasElement);
 
   await waitFor(
     () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       expect(canvas.getByLabelText("Name *")).toBeEnabled();
     },
     { timeout: 3000 }

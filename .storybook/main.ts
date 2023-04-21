@@ -1,7 +1,9 @@
+import { StorybookConfig } from "@storybook/react-webpack5";
+
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
 
-module.exports = {
+const config: StorybookConfig = {
   stories: [
     "../docs/**/*.stories.mdx",
     "../src/**/*.stories.mdx",
@@ -13,13 +15,13 @@ module.exports = {
     "@storybook/addon-interactions",
   ],
   webpackFinal: async (config) => {
-    config.resolve.plugins = [
-      ...(config.resolve.plugins || []),
+    config!.resolve!.plugins = [
+      ...(config?.resolve?.plugins || []),
       new TsconfigPathsPlugin({
-        extensions: config.resolve.extensions,
+        extensions: config?.resolve?.extensions,
       }),
     ];
-    config.plugins.push(
+    config?.plugins?.push(
       new MonacoWebpackPlugin({
         languages: ["yaml"],
         customLanguages: [
@@ -36,8 +38,13 @@ module.exports = {
     );
     return config;
   },
-  framework: "@storybook/react",
-  core: {
-    builder: "@storybook/builder-webpack5",
+  framework: {
+    name: "@storybook/react-webpack5",
+    options: {},
+  },
+  docs: {
+    autodocs: true,
   },
 };
+
+export default config;

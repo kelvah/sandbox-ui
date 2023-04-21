@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/await-thenable */
 
-import React from "react";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
 import CreateInstance from "@app/Instance/CreateInstance/CreateInstance";
 import { CloudProviderWithRegions } from "@app/Instance/CreateInstance/types";
 import {
@@ -11,8 +9,9 @@ import {
 } from "@app/Instance/CreateInstance/storiesHelpers";
 import { userEvent, waitFor, within } from "@storybook/testing-library";
 import { expect } from "@storybook/jest";
+import { Meta, StoryObj } from "@storybook/react";
 
-export default {
+const meta = {
   title: "Bridge/Create Smart Events Instance",
   component: CreateInstance,
   args: {
@@ -23,91 +22,93 @@ export default {
         resolve([cloudProvider]);
       }),
     createBridge: () => {},
-    appendTo: () => document.getElementById("root") || document.body,
+    appendTo: () => document.getElementById("storybook-root") || document.body,
   },
-} as ComponentMeta<typeof CreateInstance>;
+} as Meta<typeof CreateInstance>;
+export default meta;
 
-const Template: ComponentStory<typeof CreateInstance> = (args) => {
-  return (
-    <div>
-      <CreateInstance {...args} />
-    </div>
-  );
+type Story = StoryObj<typeof meta>;
+
+export const CreateSmartEventsInstance: Story = {
+  args: {
+    getCloudProviders: (): Promise<CloudProviderWithRegions[]> =>
+      new Promise<CloudProviderWithRegions[]>((resolve) => {
+        setTimeout(() => {
+          resolve([cloudProvider]);
+        }, 500);
+      }),
+  },
 };
 
-export const CreateSmartEventsInstance = Template.bind({});
-CreateSmartEventsInstance.args = {
-  getCloudProviders: (): Promise<CloudProviderWithRegions[]> =>
-    new Promise<CloudProviderWithRegions[]>((resolve) => {
-      setTimeout(() => {
-        resolve([cloudProvider]);
-      }, 500);
-    }),
+export const FormValidation: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await waitFor(
+      async () => {
+        await expect(canvas.getByLabelText("Name *")).toBeEnabled();
+      },
+      { timeout: 3000 }
+    );
+    await userEvent.click(
+      await canvas.getByText("Create Smart Events instance")
+    );
+  },
 };
 
-export const FormValidation = Template.bind({});
-FormValidation.play = async ({ canvasElement }): Promise<void> => {
-  const canvas = within(canvasElement);
-
-  await waitFor(
-    async () => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      await expect(canvas.getByLabelText("Name *")).toBeEnabled();
+export const CreationPending: Story = {
+  args: {
+    createBridge: (): void => {
+      // Doing nothing to remain in the loading status
     },
-    { timeout: 3000 }
-  );
-  await userEvent.click(await canvas.getByText("Create Smart Events instance"));
+  },
+  play: sampleSubmit,
 };
 
-export const CreationPending = Template.bind({});
-CreationPending.args = {
-  createBridge: (): void => {
-    // Doing nothing to remain in the loading status
+export const ProvidersUnavailable: Story = {
+  args: {
+    getCloudProviders: (): Promise<CloudProviderWithRegions[]> =>
+      new Promise<CloudProviderWithRegions[]>((resolve) => {
+        resolve([cloudProviderUnavailable]);
+      }),
   },
 };
-CreationPending.play = sampleSubmit;
 
-export const ProvidersUnavailable = Template.bind({});
-ProvidersUnavailable.args = {
-  getCloudProviders: (): Promise<CloudProviderWithRegions[]> =>
-    new Promise<CloudProviderWithRegions[]>((resolve) => {
-      resolve([cloudProviderUnavailable]);
-    }),
+export const NameAlreadyTakenError: Story = {
+  name: "Creation Error - Name taken",
+  args: {
+    createBridge: (_data, _onSuccess, onError): void => {
+      onError("name-taken");
+    },
+  },
+  play: sampleSubmit,
 };
 
-export const NameAlreadyTakenError = Template.bind({});
-NameAlreadyTakenError.storyName = "Creation Error - Name taken";
-NameAlreadyTakenError.args = {
-  createBridge: (_data, _onSuccess, onError): void => {
-    onError("name-taken");
+export const GenericCreationError: Story = {
+  name: "Creation Error - Generic error",
+  args: {
+    createBridge: (_data, _onSuccess, onError): void => {
+      onError("generic-error");
+    },
   },
 };
-NameAlreadyTakenError.play = sampleSubmit;
 
-export const GenericCreationError = Template.bind({});
-GenericCreationError.storyName = "Creation Error - Generic error";
-GenericCreationError.args = {
-  createBridge: (_data, _onSuccess, onError): void => {
-    onError("generic-error");
+export const CloudProviderUnavailableOnSubmit: Story = {
+  name: "Creation Error - Provider no more available",
+  args: {
+    createBridge: (_data, _onSuccess, onError): void => {
+      onError("region-unavailable");
+    },
   },
+  play: sampleSubmit,
 };
-GenericCreationError.play = sampleSubmit;
 
-export const CloudProviderUnavailableOnSubmit = Template.bind({});
-CloudProviderUnavailableOnSubmit.storyName =
-  "Creation Error - Provider no more available";
-CloudProviderUnavailableOnSubmit.args = {
-  createBridge: (_data, _onSuccess, onError): void => {
-    onError("region-unavailable");
+export const QuotaError: Story = {
+  name: "Creation Error - Out of quota",
+  args: {
+    createBridge: (_data, _onSuccess, onError): void => {
+      onError("quota-error");
+    },
   },
+  play: sampleSubmit,
 };
-CloudProviderUnavailableOnSubmit.play = sampleSubmit;
-
-export const QuotaError = Template.bind({});
-QuotaError.storyName = "Creation Error - Out of quota";
-QuotaError.args = {
-  createBridge: (_data, _onSuccess, onError): void => {
-    onError("quota-error");
-  },
-};
-QuotaError.play = sampleSubmit;

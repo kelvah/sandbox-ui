@@ -4,7 +4,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { DeleteModal } from "@app/components/DeleteModal/DeleteModal";
 
 export default {
-  title: "Shared/DeleteModal",
+  title: "Shared/Delete Modal",
   component: DeleteModal,
   args: {
     ouiaId: "delete-modal-story",

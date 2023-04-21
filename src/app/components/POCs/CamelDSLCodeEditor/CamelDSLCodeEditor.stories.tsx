@@ -1,26 +1,25 @@
-import React from "react";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import CamelDSLCodeEditor from "@app/components/POCs/CamelDSLCodeEditor/CamelDSLCodeEditor";
 
-export default {
+const meta = {
   title: "PoCs/Camel DSL Code Editor",
   component: CamelDSLCodeEditor,
   args: {
     onChange: (): void => {},
     onValidate: (): void => {},
     width: "100%",
-    height: 500,
+    height: "500px",
     sinkConnectorsNames: [],
   },
-} as ComponentMeta<typeof CamelDSLCodeEditor>;
+} as Meta<typeof CamelDSLCodeEditor>;
 
-const Template: ComponentStory<typeof CamelDSLCodeEditor> = (args) => (
-  <CamelDSLCodeEditor {...args} />
-);
+export default meta;
 
-export const SampleProcessor = Template.bind({});
-SampleProcessor.args = {
-  code: `- from:
+type Story = StoryObj<typeof meta>;
+
+export const SampleProcessor: Story = {
+  args: {
+    code: `- from:
     uri: "rhose:bridge"
     steps:
       - filter:
@@ -32,11 +31,12 @@ SampleProcessor.args = {
                 template: 'hello \${body.name}'
           - to:
               uri: "SomeAction"`,
+  },
 };
 
-export const InvalidSource = Template.bind({});
-InvalidSource.args = {
-  code: `- from:
+export const InvalidSource: Story = {
+  args: {
+    code: `- from:
     uri: "some:source"
     steps:
       - filter:
@@ -48,11 +48,12 @@ InvalidSource.args = {
                 template: 'hello \${body.name}'
           - to:
               uri: "SomeAction"`,
+  },
 };
 
-export const ToSinkNamesSuggestions = Template.bind({});
-ToSinkNamesSuggestions.args = {
-  code: `- from:
+export const ToSinkNamesSuggestions = {
+  args: {
+    code: `- from:
     uri: "rhose:bridge"
     steps:
       - filter:
@@ -64,5 +65,6 @@ ToSinkNamesSuggestions.args = {
                 template: 'hello \${body.name}'
           - to:
               uri: `,
-  sinkConnectorsNames: ["myFirstSinkName", "mySecondSinkName"],
+    sinkConnectorsNames: ["myFirstSinkName", "mySecondSinkName"],
+  },
 };

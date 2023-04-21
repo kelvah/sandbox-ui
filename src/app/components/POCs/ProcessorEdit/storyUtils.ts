@@ -5,8 +5,8 @@ import { CodeIcon, DataSinkIcon } from "@patternfly/react-icons";
 import { userEvent, waitFor, within } from "@storybook/testing-library";
 import { expect } from "@storybook/jest";
 import { PlayFunction } from "@storybook/csf";
-import { ReactFramework } from "@storybook/react";
 import { ProcessorEditProps } from "@app/components/POCs/ProcessorEdit/ProcessorEdit";
+import { ReactRenderer } from "@storybook/react";
 
 const demoTemplates: ProcessorTemplate[] = [
   {
@@ -62,10 +62,9 @@ const waitForNextButton = async (canvas: unknown): Promise<void> => {
   );
 };
 
-const deployFunction: PlayFunction<
-  ReactFramework,
-  ProcessorEditProps
-> = async ({ canvasElement }) => {
+const deployFunction: PlayFunction<ReactRenderer, ProcessorEditProps> = async ({
+  canvasElement,
+}) => {
   const canvas = within(canvasElement);
 
   await waitForNextButton(canvas);

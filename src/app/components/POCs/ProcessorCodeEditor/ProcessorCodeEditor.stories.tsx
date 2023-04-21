@@ -1,8 +1,8 @@
 import React from "react";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { StoryObj, Meta } from "@storybook/react";
 import ProcessorCodeEditor from "@app/components/POCs/ProcessorCodeEditor/ProcessorCodeEditor";
 
-export default {
+const meta = {
   title: "PoCs/Processor Code Editor",
   component: ProcessorCodeEditor,
   args: {
@@ -11,17 +11,22 @@ export default {
     onGuideClick: () => {},
     sinkConnectorsNames: ["one", "two"],
   },
-} as ComponentMeta<typeof ProcessorCodeEditor>;
+  decorators: [
+    (Story): JSX.Element => (
+      <div style={{ height: "100%" }}>
+        <Story />
+      </div>
+    ),
+  ],
+} as Meta<typeof ProcessorCodeEditor>;
 
-const Template: ComponentStory<typeof ProcessorCodeEditor> = (args) => (
-  <div style={{ height: "100%" }}>
-    <ProcessorCodeEditor {...args} />
-  </div>
-);
+export default meta;
 
-export const CodeEditor = Template.bind({});
-CodeEditor.args = {
-  code: `- from:
+type Story = StoryObj<typeof meta>;
+
+export const CodeEditor: Story = {
+  args: {
+    code: `- from:
     uri: "rhose:bridge"
     steps:
       - filter:
@@ -33,4 +38,5 @@ CodeEditor.args = {
                 template: 'hello \${body.name}'
           - to:
               uri: "SomeAction"`,
+  },
 };

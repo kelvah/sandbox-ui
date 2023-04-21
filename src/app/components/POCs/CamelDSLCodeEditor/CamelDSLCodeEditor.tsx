@@ -16,9 +16,9 @@ export interface CamelDSLCodeEditorProps {
   /** Callback for changes in the validation status */
   onValidate: (errorsCount: number, warningsCount: number) => void;
   /** Width of the code editor */
-  width?: string | number;
+  width?: string;
   /** Height of the code editor */
-  height?: string | number;
+  height?: string;
   /** Editor is Read-only */
   readOnly: boolean;
   /** Sink names to use as suggested values for the 'to' property */
@@ -43,7 +43,15 @@ interface Suggestion {
 const CamelDSLCodeEditor: VoidFunctionComponent<CamelDSLCodeEditorProps> = (
   props
 ) => {
-  const { code, onChange, onValidate, readOnly, sinkConnectorsNames } = props;
+  const {
+    code,
+    onChange,
+    onValidate,
+    readOnly,
+    sinkConnectorsNames,
+    width = "100%",
+    height = "100%",
+  } = props;
 
   const completionProvider = useRef<monacoEditor.IDisposable>();
 
@@ -140,8 +148,8 @@ const CamelDSLCodeEditor: VoidFunctionComponent<CamelDSLCodeEditorProps> = (
     <div className="camel-editor">
       <div className="camel-editor-inner">
         <CodeEditor
-          width={"100%"}
-          height={"100%"}
+          width={width}
+          height={height}
           language={Language.yaml}
           code={code}
           options={{
